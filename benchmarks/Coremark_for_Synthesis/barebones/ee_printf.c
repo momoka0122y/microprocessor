@@ -594,7 +594,7 @@ void uart_send_char(char c) {
     //uart wait
     volatile int sum = 0;
     int i;
-    int uart_wait = 100;
+    int uart_wait = 10000;
     for(i=0; i<uart_wait; i++) sum += i;
 
     //serial output
