@@ -13,7 +13,7 @@ OBJS = $(SRCS:.c=.o)
 include ../tools/Makefile.inc
 
 
-all: code.hex data.hex
+all: code.hex data.hex data_byte.hex
 
 
 %.o: %.c Makefile
@@ -36,6 +36,9 @@ prog.hex: prog.bin
 
 code.hex data.hex: prog.hex
 	$(HEX_SPLITTER) prog.hex code.hex 0x8000 0x10000 data.hex 0x10000 0x18000 $(BIN_SIZE)
+
+data_byte.hex: data.hex
+	perl -nle 'for($$i=3;$$i>=0;$$i--){ print substr($$_, $$i*2, 2); }' <data.hex >data_byte.hex
 
 .PHONY: clean
 clean:
