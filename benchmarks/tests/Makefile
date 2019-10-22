@@ -14,7 +14,6 @@ SRC_DIRS = \
 	IntRegReg \
 	LoadAndStore \
 	ZeroRegister \
-	MemoryDependent \
 
 # 中間ファイルのリスト
 ASM_SRCS  = $(SRC_DIRS:%=%/code.s)
