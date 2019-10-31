@@ -5,7 +5,7 @@
     .globl    main
     .type     main, @function
 main:
-    li      a0, 0x400
+    li      a0, 0x10400
     li      a1, 0x80880008
     li      a2, 0x08808880
     j       main2
