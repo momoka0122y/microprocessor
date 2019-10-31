@@ -132,6 +132,8 @@ while True:
     line = file.readline()
     if line == "" :
         break
+    if "attribute" in line :
+        break
     if "debug" in line :
         break
     match = re.match( r"\s+([0-9|a-f|A-F]+)\:[\s]+([0-9|a-f|A-F]+).*", line )
