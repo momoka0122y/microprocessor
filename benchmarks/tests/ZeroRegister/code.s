@@ -29,8 +29,5 @@ main3:
     andi    a6, zero, 0xffffffff  # RegImm ゼロレジスタ参照
     sw      a1, 0(a0)           # メモリ定数作成
     lw      zero, 0(a0)         # load ゼロレジスタ代入
-    lw      a7, 0x10400(zero)     # load ゼロレジスタ参照
-    sw      zero, 0(a0)         # store ゼロレジスタ参照
-    lw      s2, 0x10400(zero)     # load ゼロレジスタ参照
 end4:
     j       end4               # ここでループして終了
