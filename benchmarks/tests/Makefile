@@ -14,6 +14,7 @@ SRC_DIRS = \
 	IntRegReg \
 	LoadAndStore \
 	ZeroRegister \
+	Uart \
 
 # 中間ファイルのリスト
 ASM_SRCS  = $(SRC_DIRS:%=%/code.s)
