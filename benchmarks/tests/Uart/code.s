@@ -13,6 +13,6 @@ end:
 end2:
     j       end2
 main2:
-    sw      a1, 0(a0)            # 0xF6FFF070に0x00000041（ASCIIコードの'A'）をストアする
+    sb      a1, 0(a0)            # 0xF6FFF070に0x00000041（ASCIIコードの'A'）をストアする
 main3:
     j       main3                # ここでループして終了
