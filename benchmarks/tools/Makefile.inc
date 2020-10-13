@@ -42,7 +42,7 @@ LDFLAGS= \
 
 LIBC =
 LIBGCC = \
-  -L$(GCC_DIR)/lib/gcc/riscv32-unknown-elf/9.2.0 \
+  -L$(GCC_DIR)/lib/gcc/riscv32-unknown-elf/10.2.0 \
 	-lgcc \
 	-lgcov \
 	-L$(GCC_DIR)/riscv32-unknown-elf/lib \

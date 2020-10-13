@@ -1,10 +1,13 @@
+Onikiri Version 2.9000
+Emulator ... initialized.
+Resources ... initialized.
 2K performance run parameters for coremark.
 CoreMark Size    : 666
 Total ticks      : 10
 Total time (secs): 10
 Iterations/Sec   : 0
 Iterations       : 1
-Compiler version : GCC7.1.1 20170509
+Compiler version : GCC10.2.0
 Compiler flags   : 
 Memory location  : STACK
 seedcrc          : 0xe9f5
