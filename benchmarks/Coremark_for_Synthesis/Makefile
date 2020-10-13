@@ -68,4 +68,4 @@ data_byte.hex: data.hex
 
 .PHONY: clean
 clean:
-	rm $(OBJS) code.hex data.hex prog.hex prog.dump prog.bin prog.elf crt.o -f
+	rm $(OBJS) code.hex data.hex data_byte.hex prog.hex prog.dump prog.bin prog.elf crt.o -f
