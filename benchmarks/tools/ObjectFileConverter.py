@@ -39,56 +39,56 @@ class RSD_Memory( object ):
         # 初期化せずにx(不定)の値が残ってしまうと、
         # 合成前後でシミュレーション結果が変わってしまう
         defaultValue = int( HEX_STRING_DEFAULT_VALUE, 16 )
-        self.wordList = [defaultValue] * wordNum
+        self.wordList = [defaultValue] * int( wordNum )
 
     def SetWord( self, addr, word ):
         if addr % 4 == 0:
-            self.wordList[ addr / self.bytePerWord ] = word
+            self.wordList[ addr // self.bytePerWord ] = word
         if ( addr % 4 == 1 ) or ( addr % 4 == 3 ):
             print("this alignment does not assumed!",hex(addr),hex(word))
             sys.exit(1)
         if addr % 4 == 2:
             # 4バイト境界をまたがるようなデータの格納
-            upperWord = self.wordList[ ( addr + 2 ) / self.bytePerWord ]
+            upperWord = self.wordList[ ( addr + 2 ) // self.bytePerWord ]
             upperWord = upperWord & 0xffff0000
             upperWord = upperWord | ( ( word >> 16 ) & 0x0000ffff ) #論理シフト
-            self.wordList[ ( addr + 2 ) / self.bytePerWord ] = upperWord
-            lowerWord = self.wordList[ ( addr - 2 ) / self.bytePerWord ]
+            self.wordList[ ( addr + 2 ) // self.bytePerWord ] = upperWord
+            lowerWord = self.wordList[ ( addr - 2 ) // self.bytePerWord ]
             lowerWord = lowerWord & 0x0000ffff
             lowerWord = lowerWord | ( ( word & 0x0000ffff ) << 16 ) #論理シフト
-            self.wordList[ ( addr - 2 ) / self.bytePerWord ] = lowerWord
+            self.wordList[ ( addr - 2 ) // self.bytePerWord ] = lowerWord
 
     def SetHalfWord( self, addr, halfWord ):
         upper = ( ( addr%self.bytePerWord ) == 2)
-        word = self.wordList[ addr / self.bytePerWord ]
+        word = self.wordList[ addr // self.bytePerWord ]
         if upper:
             word = word & 0x0000ffff
             word = word | ( halfWord << 16 )
-            self.wordList[ addr / self.bytePerWord ] = word
+            self.wordList[ addr // self.bytePerWord ] = word
         else:
             word = word & 0xffff0000
             word = word | halfWord
-            self.wordList[ addr / self.bytePerWord ] = word
+            self.wordList[ addr // self.bytePerWord ] = word
 
     def SetByte( self, addr, byte ):
         align = addr%self.bytePerWord
-        word = self.wordList[ addr / self.bytePerWord ]
+        word = self.wordList[ addr // self.bytePerWord ]
         if align == 0:
             word = word & 0xffffff00
             word = word | byte
-            self.wordList[ addr / self.bytePerWord ] = word
+            self.wordList[ addr // self.bytePerWord ] = word
         elif align == 1:
             word = word & 0xffff00ff
             word = word | ( byte << 8 )
-            self.wordList[ addr / self.bytePerWord ] = word
+            self.wordList[ addr // self.bytePerWord ] = word
         elif align == 2:
             word = word & 0xff00ffff
             word = word | ( byte << 16 )
-            self.wordList[ addr / self.bytePerWord ] = word
+            self.wordList[ addr // self.bytePerWord ] = word
         elif align == 3:
             word = word & 0x00ffffff
             word = word | ( byte << 24 )
-            self.wordList[ addr / self.bytePerWord ] = word
+            self.wordList[ addr // self.bytePerWord ] = word
 
     def WriteBinFile( self, binFileName ):
         binFile = open( binFileName, 'wb' )

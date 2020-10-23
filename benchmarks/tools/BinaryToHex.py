@@ -23,7 +23,7 @@ ENTRY_BYTE_SIZE = 4
 # Entry point
 #
 if len(sys.argv) < 3:
-    print "Usage: %s BinaryFileName HexFileName [ Size ]" % ( sys.argv[0] )
+    print( "Usage: %s BinaryFileName HexFileName [ Size ]" % sys.argv[0] )
 
 binFileName = sys.argv[1]
 hexFileName = sys.argv[2]
@@ -41,8 +41,7 @@ else:
 # Generate a hex string.
 strListPerByte = []
 for ptr in range( 0, convertSize ):
-    ( byteData, ) = struct.unpack( "<B", binData[ ptr ] )
-    byteDataString = "%02x" % ( byteData )
+    byteDataString = "%02x" % binData[ ptr ]
     strListPerByte.append(byteDataString)
 
 strListPerEntry = []
@@ -56,6 +55,6 @@ for offset in range(0, convertSize, ENTRY_BYTE_SIZE):
 strHexFile = '\n'.join( strListPerEntry )
 
 # Write a hex file.
-hexFile = open( hexFileName, 'wb' )
+hexFile = open( hexFileName, 'w' )
 hexFile.write( strHexFile )
 hexFile.close()

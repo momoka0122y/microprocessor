@@ -73,11 +73,11 @@ $(CRTOBJ): $(CRTASM)
 
 # ELF を O
 OBJECT_FILE_CONVERTER = \
-	python $(TEST_TOOL_ROOT)/ObjectFileConverter.py
+	python3 $(TEST_TOOL_ROOT)/ObjectFileConverter.py
 
 # バイナリファイルを、RSDのシミュレーションで使える形式のhexに変換
 BIN_TO_HEX = \
-	python $(TEST_TOOL_ROOT)/BinaryToHex.py
+	python3 $(TEST_TOOL_ROOT)/BinaryToHex.py
 
 HEX_SPLITTER = \
 	python3 $(TEST_TOOL_ROOT)/SplitDataAndCode.py
