@@ -21,6 +21,48 @@ module decoder(
     output reg          is_halt
 );
 
+  assign srcreg1_num = (op_type == `TYPE_U) ? 5'b0:
+                       (op_type == `TYPE_J) ? 5'b0:
+                       (op_type == `TYPE_I) ? ir[19:15]:
+                       (op_type == `TYPE_B) ? ir[19:15]:
+                       (op_type == `TYPE_S) ? ir[19:15]:
+                       (op_type == `TYPE_R) ? ir[19:15]:
+                       5'b0;                       
+
+  assign srcreg2_num = (op_type == `TYPE_U) ? 0:
+                       (op_type == `TYPE_J) ? 0:
+                       (op_type == `TYPE_I) ? 0:
+                       (op_type == `TYPE_B) ? ir[24:20]:
+                       (op_type == `TYPE_S) ? ir[24:20]:
+                       (op_type == `TYPE_R) ? ir[24:20]:
+                       5'b0;
+
+  assign dstreg_num =  (op_type == `TYPE_U) ? ir[11:7]:
+                       (op_type == `TYPE_J) ? ir[11:7]:
+                       (op_type == `TYPE_I) ? ir[11:7]:
+                       (op_type == `TYPE_B) ? 0:
+                       (op_type == `TYPE_S) ? 0:
+                       (op_type == `TYPE_R) ? ir[11:7]:
+                       5'b0;
+                       
+  assign imm = 
+              (op_type == `TYPE_U) ? 
+                {ir[31:12],12'b0}
+              : (op_type == `TYPE_J) ? 
+                {{11{ir[31]}},ir[31],ir[19:12],ir[20],ir[30:21], 1'b0}
+              : ((op_type == `TYPE_I) && (funct3[1:0] == 2'b01)) ? 
+                {{27{ir[24]}},ir[24:20]}
+              : (op_type == `TYPE_I) ?
+                {{20{ir[31]}},ir[31:20]}
+              : (op_type == `TYPE_B) ?
+                {{19{ir[31]}},ir[31],ir[7],ir[30:25],ir[11:8],1'b0}
+              : (op_type == `TYPE_S) ?
+                {{20{ir[31]}},ir[31:25],ir[11:7]}
+              : (op_type == `TYPE_R) ?
+                32'b0
+              :
+                32'b0;
+  
 
 
 always @(ir) begin
@@ -28,18 +70,18 @@ always @(ir) begin
     case(ir[6:0]) // opcode  //9 cases
     `OPIMM:begin  // imm, rs1, type, rd, case
 
-        // srcreg1_num
-        srcreg1_num <= ir[19:15];
+        // // srcreg1_num
+        // srcreg1_num <= ir[19:15];
 
-        // srcreg2_num
-        srcreg2_num <= 5'b00000;
+        // // srcreg2_num
+        // srcreg2_num <= 5'b00000;
 
-        // dstreg_num
-        dstreg_num <= ir[11:7];
+        // // dstreg_num
+        // dstreg_num <= ir[11:7];
 
-        // imm
-        if(ir[13:12]===2'b01) imm <= {{28{ir[24]}},ir[23:20]};
-        else                  imm <= {{20{ir[31]}},ir[31:20]};
+        // // imm
+        // if(ir[13:12]===2'b01) imm <= {{28{ir[24]}},ir[23:20]};
+        // else                  imm <= {{20{ir[31]}},ir[31:20]};
 
         // alucode
         case(ir[14:12])
@@ -95,3 +137,6 @@ always @(ir) begin
 
     `LOAD:begin
     end
+    endcase
+end
+endmodule
