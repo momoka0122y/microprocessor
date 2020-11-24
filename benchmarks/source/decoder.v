@@ -53,22 +53,22 @@ always @(ir) begin
             3'b101 :alucode <= ir[30]?`ALU_SRA:`ALU_SRL;
         endcase
         // aluop1_type
-        aluop1_type <= `OP_TYPE_REG
+        aluop1_type <= `OP_TYPE_REG;
 
         // aluop2_type
-        aluop2_type <= `OP_TYPE_IMM
+        aluop2_type <= `OP_TYPE_IMM;
 
         // reg_we
-        reg_we <= `ENABLE
+        reg_we <= `ENABLE;
         
         // is_load
-        is_load <= `DISABLE
+        is_load <= `DISABLE;
 
         // is_store
-        is_store <= `DISABLE
+        is_store <= `DISABLE;
 
         // is_halt
-        is_halt <= `DISABLE
+        is_halt <= `DISABLE;
 
     end
 
