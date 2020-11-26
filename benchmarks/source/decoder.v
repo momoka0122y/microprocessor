@@ -138,9 +138,12 @@ always @(ir) begin
 
       `JAL   : begin
         op_type <= `TYPE_J;
-        if (dstreg_num == 5'b0) reg_we <= `DISABLE;
-        else reg_we <= `ENABLE;
-        // reg_we <= dstreg_num ?  `ENABLE : `DISABLE;
+        // $display(ir[11:7] == 5'b00000);
+        // $display(ir[11:7]);
+        // if (ir[11:7] == 5'b00000) reg_we <= `DISABLE;
+        // else reg_we <= `ENABLE;
+        reg_we <= ir[11:7] ?  `ENABLE : `DISABLE;
+        
         alucode <= `ALU_JAL;
         aluop1_type <= `OP_TYPE_NONE;
         aluop2_type <= `OP_TYPE_PC;
@@ -151,8 +154,7 @@ always @(ir) begin
 
       `JALR  : begin
         op_type <= `TYPE_I;
-        if (dstreg_num == 0) reg_we <= `DISABLE;
-        else reg_we <= `ENABLE;
+        reg_we <= ir[11:7] ?  `ENABLE : `DISABLE;
         alucode <= `ALU_JALR;
         aluop1_type <= `OP_TYPE_REG;
         aluop2_type <= `OP_TYPE_PC;
