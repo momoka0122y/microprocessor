@@ -97,7 +97,6 @@ always @(ir) begin
         
         // alucode
         case(ir[14:12])
-            3'b000 : alucode <= `ALU_ADD;
             3'b000 : alucode <= ir[30] ?  `ALU_ADD : `ALU_SUB;
             3'b010 : alucode <= `ALU_SLT;
             3'b011 : alucode <= `ALU_SLTU;
