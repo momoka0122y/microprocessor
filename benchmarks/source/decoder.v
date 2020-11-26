@@ -64,7 +64,7 @@ reg [2:0] op_type;
 always @(ir) begin
 
     case(ir[6:0]) // opcode  //9 cases
-    `OPIMM:begin  // imm, rs1, type, rd, case
+    `OPIMM:begin
 
         // // srcreg1_num, srcreg2_num, dstreg_num, imm
         op_type <= `TYPE_I;
@@ -91,13 +91,11 @@ always @(ir) begin
     end
 
     `OP:begin
-
             // // srcreg1_num, srcreg2_num, dstreg_num, imm
         op_type <= `TYPE_R;
         
         // alucode
         case(ir[14:12])
-//            3'b000 : alucode <= `ALU_ADD;
             3'b000 : alucode <= ir[30] ?  `ALU_SUB : `ALU_ADD;
             3'b010 : alucode <= `ALU_SLT;
             3'b011 : alucode <= `ALU_SLTU;
@@ -117,25 +115,104 @@ always @(ir) begin
     end
 
     `LUI:begin
+        op_type <= `TYPE_U;
+        alucode <= `ALU_LUI;
+        reg_we <= `ENABLE;
+        aluop1_type <= `OP_TYPE_NONE;
+        aluop2_type <= `OP_TYPE_IMM;
+        is_load <= `DISABLE;
+        is_store <= `DISABLE;
+        is_halt <= `DISABLE;
     end
 
-    `AUIPC:begin
-    end
+    `AUIPC : begin
+        op_type <= `TYPE_U;
+        reg_we <= `ENABLE;
+        alucode <= `ALU_ADD;
+        aluop1_type <= `OP_TYPE_IMM;
+        aluop2_type <= `OP_TYPE_PC;
+        is_load <= `DISABLE;
+        is_store <= `DISABLE;
+        is_halt <= `DISABLE;
+      end
 
-    `JAL:begin
-    end
+      `JAL   : begin
+        op_type <= `TYPE_J;
+        if (dstreg_num == 5'b0) reg_we <= `DISABLE;
+        else reg_we <= `ENABLE;
+        // reg_we <= dstreg_num ?  `ENABLE : `DISABLE;
+        alucode <= `ALU_JAL;
+        aluop1_type <= `OP_TYPE_NONE;
+        aluop2_type <= `OP_TYPE_PC;
+        is_load <= `DISABLE;
+        is_store <= `DISABLE;
+        is_halt <= `DISABLE;
+      end
 
-    `JALR:begin
-    end
+      `JALR  : begin
+        op_type <= `TYPE_I;
+        if (dstreg_num == 0) reg_we <= `DISABLE;
+        else reg_we <= `ENABLE;
+        alucode <= `ALU_JALR;
+        aluop1_type <= `OP_TYPE_REG;
+        aluop2_type <= `OP_TYPE_PC;
+        is_load <= `DISABLE;
+        is_store <= `DISABLE;
+        is_halt <= `DISABLE;
+      end
 
-    `BRANCH:begin
-    end
+    `BRANCH: begin
+        op_type <= `TYPE_B;
+        reg_we <= `DISABLE;
+        aluop1_type <= `OP_TYPE_REG;
+        aluop2_type <= `OP_TYPE_REG;
+        is_load <= `DISABLE;
+        is_store <= `DISABLE;
+        is_halt <= `DISABLE;
 
-    `STORE:begin
-    end
+        case(ir[14:12])
+          3'd0: alucode <= `ALU_BEQ;
+          3'd1: alucode <= `ALU_BNE;
+          3'd4: alucode <= `ALU_BLT;
+          3'd5: alucode <= `ALU_BGE;
+          3'd6: alucode <= `ALU_BLTU;
+          3'd7: alucode <= `ALU_BGEU;
+        endcase
+      end
 
-    `LOAD:begin
-    end
+    `STORE : begin
+        op_type <= `TYPE_S;
+        reg_we <= `DISABLE;
+        aluop1_type <= `OP_TYPE_REG;
+        aluop2_type <= `OP_TYPE_IMM;
+        is_load <= `DISABLE;
+        is_store <= `ENABLE;
+        is_halt <= `DISABLE;
+
+        case(ir[14:12])
+          3'd0: alucode <= `ALU_SB;
+          3'd1: alucode <= `ALU_SH;
+          3'd2: alucode <= `ALU_SW;
+        endcase
+      end
+
+    `LOAD  : begin
+        op_type <= `TYPE_I;
+        reg_we <= `ENABLE;
+        aluop1_type <= `OP_TYPE_REG;
+        aluop2_type <= `OP_TYPE_IMM;
+        is_load <= `ENABLE;
+        is_store <= `DISABLE;
+        is_halt <= `DISABLE;
+
+        case(ir[14:12])
+          3'd0: alucode <= `ALU_LB;
+          3'd1: alucode <= `ALU_LH;
+          3'd2: alucode <= `ALU_LW;
+          3'd4: alucode <= `ALU_LBU;
+          3'd5: alucode <= `ALU_LHU;
+        endcase
+      end
     endcase
 end
 endmodule
