@@ -21,6 +21,9 @@ module decoder(
     output reg          is_halt
 );
 
+reg [2:0] op_type;
+
+
   assign srcreg1_num = (op_type == `TYPE_U) ? 5'b0:
                        (op_type == `TYPE_J) ? 5'b0:
                        (op_type == `TYPE_I) ? ir[19:15]:
@@ -46,22 +49,15 @@ module decoder(
                        5'b0;
                        
   assign imm = 
-              (op_type == `TYPE_U) ? 
-                {ir[31:12],12'b0}
-              : (op_type == `TYPE_J) ? 
-                {{11{ir[31]}},ir[31],ir[19:12],ir[20],ir[30:21], 1'b0}
-              : ((op_type == `TYPE_I) && (funct3[1:0] == 2'b01)) ? 
-                {{27{ir[24]}},ir[24:20]}
-              : (op_type == `TYPE_I) ?
-                {{20{ir[31]}},ir[31:20]}
-              : (op_type == `TYPE_B) ?
-                {{19{ir[31]}},ir[31],ir[7],ir[30:25],ir[11:8],1'b0}
-              : (op_type == `TYPE_S) ?
-                {{20{ir[31]}},ir[31:25],ir[11:7]}
-              : (op_type == `TYPE_R) ?
-                32'b0
-              :
-                32'b0;
+              (op_type == `TYPE_U) ? {ir[31:12],12'b0}:
+              (op_type == `TYPE_J) ? {{11{ir[31]}},ir[31],ir[19:12],ir[20],ir[30:21], 1'b0}:
+              ((op_type == `TYPE_I) && (ir[13:12] == 2'b01)) 
+                                   ? {{27{ir[24]}},ir[24:20]}:
+              (op_type == `TYPE_I) ? {{20{ir[31]}},ir[31:20]}:
+              (op_type == `TYPE_B) ? {{19{ir[31]}},ir[31],ir[7],ir[30:25],ir[11:8],1'b0}:
+              (op_type == `TYPE_S) ? {{20{ir[31]}},ir[31:25],ir[11:7]}:
+              (op_type == `TYPE_R) ? 32'b0:
+              32'b0;
   
 
 
@@ -70,51 +66,54 @@ always @(ir) begin
     case(ir[6:0]) // opcode  //9 cases
     `OPIMM:begin  // imm, rs1, type, rd, case
 
-        // // srcreg1_num
-        // srcreg1_num <= ir[19:15];
-
-        // // srcreg2_num
-        // srcreg2_num <= 5'b00000;
-
-        // // dstreg_num
-        // dstreg_num <= ir[11:7];
-
-        // // imm
-        // if(ir[13:12]===2'b01) imm <= {{28{ir[24]}},ir[23:20]};
-        // else                  imm <= {{20{ir[31]}},ir[31:20]};
-
+        // // srcreg1_num, srcreg2_num, dstreg_num, imm
+        op_type <= `TYPE_I;
+        
         // alucode
         case(ir[14:12])
-            3'b000 : alucode <=`ALU_ADD;
-            3'b010 : alucode <=`ALU_SLT;
-            3'b011 : alucode <=`ALU_SLTU;
+            3'b000 : alucode <= `ALU_ADD;
+            3'b010 : alucode <= `ALU_SLT;
+            3'b011 : alucode <= `ALU_SLTU;
             3'b100 : alucode <= `ALU_XOR;
             3'b110 : alucode <= `ALU_OR;
             3'b111 :alucode <= `ALU_AND;
             3'b001 :alucode <= `ALU_SLL;
-            3'b101 :alucode <= ir[30]?`ALU_SRA:`ALU_SRL;
+            3'b101 :alucode <= ir[30] ? `ALU_SRA : `ALU_SRL;
         endcase
-        // aluop1_type
+
         aluop1_type <= `OP_TYPE_REG;
-
-        // aluop2_type
         aluop2_type <= `OP_TYPE_IMM;
-
-        // reg_we
         reg_we <= `ENABLE;
-        
-        // is_load
         is_load <= `DISABLE;
-
-        // is_store
         is_store <= `DISABLE;
-
-        // is_halt
         is_halt <= `DISABLE;
 
     end
 
     `OP:begin
+
+            // // srcreg1_num, srcreg2_num, dstreg_num, imm
+        op_type <= `TYPE_R;
+        
+        // alucode
+        case(ir[14:12])
+            3'b000 : alucode <= `ALU_ADD;
+            3'b000 : alucode <= ir[30] ?  `ALU_ADD : `ALU_SUB;
+            3'b010 : alucode <= `ALU_SLT;
+            3'b011 : alucode <= `ALU_SLTU;
+            3'b100 : alucode <= `ALU_XOR;
+            3'b110 : alucode <= `ALU_OR;
+            3'b111 :alucode <= `ALU_AND;
+            3'b001 :alucode <= `ALU_SLL;
+            3'b101 :alucode <= ir[30] ? `ALU_SRA : `ALU_SRL;
+        endcase
+        
+        aluop1_type <= `OP_TYPE_REG;
+        aluop2_type <= `OP_TYPE_REG;
+        reg_we <= `ENABLE;
+        is_load <= `DISABLE;
+        is_store <= `DISABLE;
+        is_halt <= `DISABLE;
     end
 
     `LUI:begin
