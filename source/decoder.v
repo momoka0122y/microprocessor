@@ -138,8 +138,6 @@ always @(ir) begin
 
       `JAL   : begin
         op_type <= `TYPE_J;
-        // $display(ir[11:7] == 5'b00000);
-        // $display(ir[11:7]);
         // if (ir[11:7] == 5'b00000) reg_we <= `DISABLE;
         // else reg_we <= `ENABLE;
         reg_we <= ir[11:7] ?  `ENABLE : `DISABLE;
