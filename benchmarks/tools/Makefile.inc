@@ -4,7 +4,8 @@ GCC_PREFIX = riscv32-unknown-elf-
 GCC_NATIVE = $(GCC_DIR)/bin
 
 # プロジェクトの場所　# ここ変更する
-PROJECT_ROOT = $(HOME)/git/microprocessor
+PROJECT_ROOT = $(HOME)/microprocessor
+
 TEST_CODE_ROOT = .
 TEST_TOOL_ROOT = $(PROJECT_ROOT)/benchmarks/tools
 
