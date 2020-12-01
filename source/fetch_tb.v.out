@@ -1,0 +1,53 @@
+#! /usr/local/Cellar/icarus-verilog/11.0/bin/vvp
+:ivl_version "11.0 (stable)";
+:ivl_delay_selection "TYPICAL";
+:vpi_time_precision + 0;
+:vpi_module "/usr/local/Cellar/icarus-verilog/11.0/lib/ivl/system.vpi";
+:vpi_module "/usr/local/Cellar/icarus-verilog/11.0/lib/ivl/vhdl_sys.vpi";
+:vpi_module "/usr/local/Cellar/icarus-verilog/11.0/lib/ivl/vhdl_textio.vpi";
+:vpi_module "/usr/local/Cellar/icarus-verilog/11.0/lib/ivl/v2005_math.vpi";
+:vpi_module "/usr/local/Cellar/icarus-verilog/11.0/lib/ivl/va_math.vpi";
+S_0x7fc1e0206670 .scope module, "fetch_tb" "fetch_tb" 2 16;
+ .timescale 0 0;
+v0x7fc1e0216ba0_0 .net "ir", 31 0, L_0x7fc1e0216df0;  1 drivers
+v0x7fc1e0216c60_0 .var "pc", 31 0;
+S_0x7fc1e02067e0 .scope module, "fetch" "fetch" 2 22, 3 1 0, S_0x7fc1e0206670;
+ .timescale 0 0;
+    .port_info 0 /INPUT 32 "pc";
+    .port_info 1 /OUTPUT 32 "ir";
+L_0x7fc1e0216df0 .functor BUFZ 32, L_0x7fc1e0216d10, C4<00000000000000000000000000000000>, C4<00000000000000000000000000000000>, C4<00000000000000000000000000000000>;
+v0x7fc1e0206950_0 .net *"_ivl_0", 31 0, L_0x7fc1e0216d10;  1 drivers
+v0x7fc1e0216980_0 .net "ir", 31 0, L_0x7fc1e0216df0;  alias, 1 drivers
+v0x7fc1e0216a20 .array "ir_mem", 32768 0, 31 0;
+v0x7fc1e0216ad0_0 .net "pc", 31 0, v0x7fc1e0216c60_0;  1 drivers
+L_0x7fc1e0216d10 .array/port v0x7fc1e0216a20, v0x7fc1e0216c60_0;
+    .scope S_0x7fc1e02067e0;
+T_0 ;
+    %vpi_call 3 6 "$readmemh", "/Users/momoka/git/microprocessor/benchmarks/tests/ControlTransfer/code.hex", v0x7fc1e0216a20 {0 0 0};
+    %end;
+    .thread T_0;
+    .scope S_0x7fc1e0206670;
+T_1 ;
+    %pushi/vec4 8192, 0, 32;
+    %store/vec4 v0x7fc1e0216c60_0, 0, 32;
+    %delay 10, 0;
+    %vpi_call 2 36 "$display", "%s:", "name" {0 0 0};
+    %load/vec4 v0x7fc1e0216ba0_0;
+    %cmpi/ne 8388719, 0, 32;
+    %jmp/0xz  T_1.0, 6;
+    %vpi_call 2 39 "$display", "ASSERTION FAILED in %s : ir is '0x%x' but expected '0x%x'!", "result", v0x7fc1e0216ba0_0, 32'b00000000100000000000000001101111 {0 0 0};
+    %vpi_call 2 40 "$finish" {0 0 0};
+    %jmp T_1.1;
+T_1.0 ;
+    %vpi_call 2 42 "$display", "    ir == 32'h0080006f" {0 0 0};
+T_1.1 ;
+    %vpi_call 2 44 "$display", "%s test passed\012", "name" {0 0 0};
+    %vpi_call 2 38 "$display", "all tests passed!" {0 0 0};
+    %end;
+    .thread T_1;
+# The file index is used to find the file name in the following table.
+:file_names 4;
+    "N/A";
+    "<interactive>";
+    "fetch_tb.v";
+    "./fetch.v";

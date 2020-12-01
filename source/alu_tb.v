@@ -18,6 +18,7 @@
         $display("%s test passed\n", name); \
 
 `include "define.vh"
+`include "alu.v"
 
 module alu_tb;
 
