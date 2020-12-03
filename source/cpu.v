@@ -79,7 +79,7 @@ module cpu(
 	);
 
 	data_mem data_mem_body(
-		.clk(sysclk),
+		.clk(clk),
 		.alucode(alucode),
 		.is_store(is_store), //decoderより。load,storeするかどうか
         .is_load(is_load),
@@ -100,7 +100,7 @@ module cpu(
 									: alu_result;
 
 	register_file register_file_body(
-	    .clk(clk),
+        .clk(clk),
         .rst(rst),
         .reg_we(reg_we),       // レジスタ書き込みの有無
         .srcreg1_num(srcreg1_num),//assignなのでつねに帰ってくる
