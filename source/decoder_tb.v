@@ -25,10 +25,12 @@
         $display("%s test ...ok\n", name); \
 
 `include "define.vh"
+`include "decoder.v"
 
 module decoder_tb;
     reg [31:0] ir;
     reg clk;
+
     wire [4:0] srcreg1_num;
     wire [4:0] srcreg2_num;
     wire [4:0] dstreg_num;
@@ -44,6 +46,7 @@ module decoder_tb;
     decoder decoder(
         .ir(ir),
         .clk(clk),
+
         .srcreg1_num(srcreg1_num),
         .srcreg2_num(srcreg2_num),
         .dstreg_num(dstreg_num),

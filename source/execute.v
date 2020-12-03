@@ -11,7 +11,7 @@ module execute(
     input wire [31:0] imm,
 
     output wire [31:0] alu_result,
-    output wire br_taken
+    output wire  [31:0]   npc
 );
 wire [31:0] op1, op2;
 
@@ -38,4 +38,11 @@ alu alu_body(
     .alu_result(alu_result),
     .br_taken(br_taken)
 );
+
+assign npc = (alucode == `ALU_JALR) ?
+        srcreg1 + imm
+        : (br_taken == `ENABLE) ?
+        pc + imm
+        : pc+4;
+
 endmodule

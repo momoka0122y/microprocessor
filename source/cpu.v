@@ -39,8 +39,8 @@ module cpu(
     wire [31:0] w_data;
     wire [31:0] r_data;
 
-    wire [31:0] hc_OUT_data;
 
+	
 
 	fetch fetch_body
 		(.pc(pc)
@@ -61,7 +61,7 @@ module cpu(
         .reg_we(reg_we),
         .is_load(is_load),
         .is_store(is_store),
-        .is_halt(is_halt)
+        .is_halt(is_halt) //分岐命令の時に使う
     );
 	
 
@@ -75,35 +75,40 @@ module cpu(
 		.imm(imm),
 
 		.alu_result(alu_result),
-		.br_taken(br_taken)
+		.npc(nextpc)
 	);
 
-	ram ram_body(
+	data_mem data_mem_body(
 		.clk(sysclk),
 		.alucode(alucode),
-		.r_addr(alu_result),
-		.w_addr(alu_result),
-		.w_data(w_data),
+		.is_store(is_store), //decoderより。load,storeするかどうか
+        .is_load(is_load),
+        .addr(alu_result),
+        .w_data(srcreg2_data),
 
-		.r_data(r_data)
+        .r_data(r_data)//resultに格納してrdに
 	);
 
 	writeback writeback_body
 		(.clk(clk)
-		,.rstd(rst_n)
+		,.rst(rst)
 		,.nextpc(nextpc)
 		,.pc(pc));
 
+
+	assign dstreg_data =  is_load   ? r_data
+									: alu_result;
 
 	register_file register_file_body(
         .rst(rst),
         .reg_we(reg_we),       // レジスタ書き込みの有無
         .srcreg1_num(srcreg1_num),//assignなのでつねに帰ってくる
         .srcreg2_num(srcreg2_num),
-        .srcreg1_data(srcreg1_data),
-        .srcreg2_data(srcreg2_data),
         .dstreg_num(dstreg_num),
-        .dstreg_data(dstreg_data)
+        .dstreg_data(dstreg_data),
+
+        .srcreg1_data(srcreg1_data),
+        .srcreg2_data(srcreg2_data)
     );
 
   initial begin

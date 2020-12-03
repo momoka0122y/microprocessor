@@ -10,10 +10,12 @@ module register_file(
     input wire	     	reg_we,       // レジスタ書き込みの有無
     input wire [4:0] srcreg1_num,
     input wire [4:0] srcreg2_num,
-    output wire [31:0] srcreg1_data,
-    output wire [31:0] srcreg2_data,
+    
     input wire [4:0] dstreg_num,
-    input wire [31:0] dstreg_data
+    input wire [31:0] dstreg_data,
+
+    output wire [31:0] srcreg1_data,
+    output wire [31:0] srcreg2_data
 );
     reg [31:0] register_file [0:31];
 
