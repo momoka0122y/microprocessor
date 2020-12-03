@@ -35,8 +35,8 @@ module cpu(
 
     wire [31:0] dstreg_data;
 
-    wire [31:0] r_addr;
-    wire [31:0] w_data;
+//    wire [31:0] r_addr;
+//    wire [31:0] w_data;
     wire [31:0] r_data;
 
 

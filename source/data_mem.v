@@ -15,7 +15,7 @@ module data_mem(
     //RAM
     reg [31:0] ram [0:32768];
     integer i;
-    initial $readmemh("/Users/momoka/git/microprocessor/benchmarks/Coremark/data.hex", ram);
+    initial $readmemh("/home/denjo/microprocessor/benchmarks/Coremark/data.hex", ram);
 
     always @(posedge clk) begin
         if(is_store) begin//store命令
