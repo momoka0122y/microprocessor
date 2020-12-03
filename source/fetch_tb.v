@@ -79,9 +79,11 @@ module fetch_tb;
         .is_halt(is_halt)
     );
     initial begin
-      pc = 8193;
+      pc = 32'h8000;
+      #10
+//      pc = 8193;
         `test_fetch("name", 32'h0000006f)
-        `test_decode(("JAL", ir, 0, 0, 0, 12, `ALU_JAL, `OP_TYPE_NONE, `OP_TYPE_PC, `DISABLE, `DISABLE, `DISABLE, `DISABLE)
+        `test_decode("JAL", ir, 0, 0, 0, 12, `ALU_JAL, `OP_TYPE_NONE, `OP_TYPE_PC, `DISABLE, `DISABLE, `DISABLE, `DISABLE)
 
         $display("all tests passed!");
     end

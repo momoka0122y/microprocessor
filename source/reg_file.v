@@ -23,34 +23,20 @@ module register_file(
     assign srcreg2_data=register_file[srcreg2_num];
     
     integer i;
-    initial begin
-        register_file[5'd0]=32'd0; //ゼロレジスタ
-    end
-
+    
     
     always @(posedge clk or negedge rst) begin
         if (rst == 1'b0) begin //reset
-            `ifdef DEBUG
-                $display("reset!");
-            `endif
             for (i=0;i<32;i=i+1) begin
                 register_file[i] <= 32'h00000000;
             end
         end
+        
         else begin
             if(reg_we==`ENABLE && dstreg_num != 5'd0) begin //書き込み
-                `ifdef DEBUG
-                     $strobe("register_file:\tregister_file[%d] <= %h", dstreg_num, dstreg_data);
-                `endif
                 register_file[dstreg_num] <= dstreg_data;
             end
         end
     end
-    `ifdef DEBUG
-        always @(posedge clk) begin
-            for (i=0;i<32;i=i+1) begin
-                $display("%d:%h",i,register_file[i]);
-            end
-        end
-    `endif
+    
 endmodule

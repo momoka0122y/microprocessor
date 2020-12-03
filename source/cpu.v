@@ -100,6 +100,7 @@ module cpu(
 									: alu_result;
 
 	register_file register_file_body(
+	    .clk(clk),
         .rst(rst),
         .reg_we(reg_we),       // レジスタ書き込みの有無
         .srcreg1_num(srcreg1_num),//assignなのでつねに帰ってくる

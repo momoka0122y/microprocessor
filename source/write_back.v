@@ -6,7 +6,7 @@ module writeback(
 	);
 	
 	always @(negedge rst or posedge clk) begin
-		if (rst == 0)	pc <= 8000;
+		if (rst == 0)	pc <= 32'h8000;
 		else if (clk == 1)	pc <= nextpc;
 	end
 endmodule
