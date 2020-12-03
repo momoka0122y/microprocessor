@@ -8,5 +8,4 @@ module fetch(pc, ir);
 
 
   assign ir = ir_mem[pc[31:2]];
-
 endmodule
