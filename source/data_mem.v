@@ -7,15 +7,64 @@ module data_mem(
     input wire clk,
     input wire [5:0] alucode,
     input wire is_store, //decoderより。load,storeするかどうか
-    input wire is_load,
+    input wire is_load,  //正直これはcpu.vで使ってるからここではいらない
     input wire [31:0] addr,
     input wire [31:0] w_data,
-    output reg [31:0] r_data
+    output wire [31:0] r_data
 );
     //RAM
     reg [31:0] ram [0:32768];
     integer i;
     initial $readmemh("/home/denjo/microprocessor/benchmarks/Coremark/data.hex", ram);
+    // initial $readmemh("/Users/momoka/git/microprocessor/benchmarks/Coremark/data.hex", ram);
+
+    assign r_data = ram[addr];
+
+// function [31:0] r_data_func;
+//     input [5:0] alucode;
+//     input [31:0] addr;
+//     input [31:0] ram;
+
+//     case(alucode)
+//     `ALU_LB : begin
+//         case(addr[1:0])
+//             2'd0: r_data_func = {{24{ram[addr[16:2]][7]}}, ram[addr[16:2]][7:0]};
+//             2'd1: r_data_func = {{24{ram[addr[16:2]][15]}}, ram[addr[16:2]][15:8]};
+//             2'd2: r_data_func = {{24{ram[addr[16:2]][23]}}, ram[addr[16:2]][23:16]};
+//             2'd3: r_data_func = {{24{ram[addr[16:2]][31]}}, ram[addr[16:2]][31:24]};
+//         endcase    
+//     end
+//     `ALU_LH : begin
+//         case(addr[1:0])
+//             2'd0: r_data_func = {{24{ram[addr[16:2]][15]}}, ram[addr[16:2]][15:0]};
+//             2'd1: r_data_func = {{24{ram[addr[16:2]][23]}}, ram[addr[16:2]][23:8]};
+//             2'd2: r_data_func = {{24{ram[addr[16:2]][31]}}, ram[addr[16:2]][31:16]};
+//             2'd3: ;
+//         endcase
+//     end
+//     `ALU_LW : begin
+//      r_data_func = ram[addr[16:2]][31:0];
+//     end
+//     `ALU_LBU : begin
+//         case(addr[1:0])
+//             2'd0: r_data_func = {{24{1'b0}}, ram[addr[16:2]][7:0]};
+//             2'd1: r_data_func = {{24{1'b0}}, ram[addr[16:2]][15:8]};
+//             2'd2: r_data_func = {{24{1'b0}}, ram[addr[16:2]][23:16]};
+//             2'd3: r_data_func = {{24{1'b0}}, ram[addr[16:2]][31:24]};
+//         endcase
+//     end
+//     `ALU_LHU : begin
+//         case(addr[1:0])
+//             2'd0: r_data_func = {{24{1'b0}}, ram[addr[16:2]][15:0]};
+//             2'd1: r_data_func = {{24{1'b0}}, ram[addr[16:2]][23:8]};
+//             2'd2: r_data_func = {{24{1'b0}}, ram[addr[16:2]][31:16]};
+//             2'd3: ;
+//         endcase
+//     end
+// endcase
+// endfunction
+
+//     assign r_data = r_data_func(alucode,addr,ram);
 
     always @(posedge clk) begin
         if(is_store) begin//store命令
@@ -41,44 +90,44 @@ module data_mem(
                 end
             endcase
         end
-        if(is_load) begin
-            case(alucode)
-                `ALU_LB : begin
-                    case(addr[1:0])
-                        2'd0: r_data <= {{24{ram[addr[16:2]][7]}}, ram[addr[16:2]][7:0]};
-                        2'd1: r_data <= {{24{ram[addr[16:2]][15]}}, ram[addr[16:2]][15:8]};
-                        2'd2: r_data <= {{24{ram[addr[16:2]][23]}}, ram[addr[16:2]][23:16]};
-                        2'd3: r_data <= {{24{ram[addr[16:2]][31]}}, ram[addr[16:2]][31:24]};
-                    endcase    
-                end
-                `ALU_LH : begin
-                    case(addr[1:0])
-                        2'd0: r_data <= {{24{ram[addr[16:2]][15]}}, ram[addr[16:2]][15:0]};
-                        2'd1: r_data <= {{24{ram[addr[16:2]][23]}}, ram[addr[16:2]][23:8]};
-                        2'd2: r_data <= {{24{ram[addr[16:2]][31]}}, ram[addr[16:2]][31:16]};
-                        2'd3: ;
-                    endcase
-                end
-                `ALU_LW : begin
-                    r_data <= ram[addr[16:2]][31:0];
-                end
-                `ALU_LBU : begin
-                    case(addr[1:0])
-                        2'd0: r_data <= {{24{1'b0}}, ram[addr[16:2]][7:0]};
-                        2'd1: r_data <= {{24{1'b0}}, ram[addr[16:2]][15:8]};
-                        2'd2: r_data <= {{24{1'b0}}, ram[addr[16:2]][23:16]};
-                        2'd3: r_data <= {{24{1'b0}}, ram[addr[16:2]][31:24]};
-                    endcase
-                end
-                `ALU_LHU : begin
-                    case(addr[1:0])
-                        2'd0: r_data <= {{24{1'b0}}, ram[addr[16:2]][15:0]};
-                        2'd1: r_data <= {{24{1'b0}}, ram[addr[16:2]][23:8]};
-                        2'd2: r_data <= {{24{1'b0}}, ram[addr[16:2]][31:16]};
-                        2'd3: ;
-                    endcase
-                end
-            endcase
-        end
+        // if(is_load) begin
+        //     case(alucode)
+        //         `ALU_LB : begin
+        //             case(addr[1:0])
+        //                 2'd0: r_data <= {{24{ram[addr[16:2]][7]}}, ram[addr[16:2]][7:0]};
+        //                 2'd1: r_data <= {{24{ram[addr[16:2]][15]}}, ram[addr[16:2]][15:8]};
+        //                 2'd2: r_data <= {{24{ram[addr[16:2]][23]}}, ram[addr[16:2]][23:16]};
+        //                 2'd3: r_data <= {{24{ram[addr[16:2]][31]}}, ram[addr[16:2]][31:24]};
+        //             endcase    
+        //         end
+        //         `ALU_LH : begin
+        //             case(addr[1:0])
+        //                 2'd0: r_data <= {{24{ram[addr[16:2]][15]}}, ram[addr[16:2]][15:0]};
+        //                 2'd1: r_data <= {{24{ram[addr[16:2]][23]}}, ram[addr[16:2]][23:8]};
+        //                 2'd2: r_data <= {{24{ram[addr[16:2]][31]}}, ram[addr[16:2]][31:16]};
+        //                 2'd3: ;
+        //             endcase
+        //         end
+        //         `ALU_LW : begin
+        //             r_data <= ram[addr[16:2]][31:0];
+        //         end
+        //         `ALU_LBU : begin
+        //             case(addr[1:0])
+        //                 2'd0: r_data <= {{24{1'b0}}, ram[addr[16:2]][7:0]};
+        //                 2'd1: r_data <= {{24{1'b0}}, ram[addr[16:2]][15:8]};
+        //                 2'd2: r_data <= {{24{1'b0}}, ram[addr[16:2]][23:16]};
+        //                 2'd3: r_data <= {{24{1'b0}}, ram[addr[16:2]][31:24]};
+        //             endcase
+        //         end
+        //         `ALU_LHU : begin
+        //             case(addr[1:0])
+        //                 2'd0: r_data <= {{24{1'b0}}, ram[addr[16:2]][15:0]};
+        //                 2'd1: r_data <= {{24{1'b0}}, ram[addr[16:2]][23:8]};
+        //                 2'd2: r_data <= {{24{1'b0}}, ram[addr[16:2]][31:16]};
+        //                 2'd3: ;
+        //             endcase
+        //         end
+        //     endcase
+        // end
     end
 endmodule
