@@ -4,7 +4,7 @@ module fetch(pc, ir);
   reg [31:0] ir_mem [0:32768];
   
 //  initial $readmemh("/Users/momoka/git/microprocessor/benchmarks/tests/ControlTransfer/code.hex", ir_mem);
-   initial $readmemh("/home/denjo/microprocessor/benchmarks/tests/ZeroRegister/code.hex", ir_mem);
+   initial $readmemh("/home/denjo/microprocessor/benchmarks/Coremark_for_Synthesis/code.hex", ir_mem);
 
 
   assign ir = ir_mem[pc[31:2]];

@@ -15,7 +15,7 @@ module data_mem(
     //RAM
     reg [31:0] ram [0:32768];
 
-    initial $readmemh("/home/denjo/microprocessor/benchmarks/Coremark/data.hex", ram);
+    initial $readmemh("/home/denjo/microprocessor/benchmarks/Coremark_for_Synthesis/data.hex", ram);
     // initial $readmemh("/Users/momoka/git/microprocessor/benchmarks/Coremark/data.hex", ram);
 
 

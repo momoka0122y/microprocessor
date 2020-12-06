@@ -10,7 +10,7 @@
 module cpu(
     input wire clk,
     input wire rst,
-    output wire uart
+    output wire uart_tx
     );
 	
 	wire [31:0] pc; //プログラムカウンタ
@@ -36,10 +36,15 @@ module cpu(
     wire [31:0] dstreg_data;
 
 //    wire [31:0] r_addr;
-//    wire [31:0] w_data;
+   wire [31:0] w_data;
     wire [31:0] r_data;
 
+	wire [31:0] hc_OUT_data;
 
+	// uart
+	wire [7:0] uart_IN_data;
+    wire uart_we;
+    wire uart_OUT_data;
 	
 
 	fetch fetch_body
@@ -78,13 +83,15 @@ module cpu(
 		.npc(nextpc)
 	);
 
+	assign ram_addr = alu_result;
+
 	data_mem data_mem_body(
 		.clk(clk),
 		.alucode(alucode),
 		.is_store(is_store), //decoderより。load,storeするかどうか
         .is_load(is_load),
-        .addr(alu_result),
-        .w_data(srcreg2_data),
+        .addr(ram_addr),
+        .w_data(w_data),
 
         .r_data(r_data)//resultに格納してrdに
 	);
@@ -95,9 +102,13 @@ module cpu(
 		,.nextpc(nextpc)
 		,.pc(pc));
 
-
-	assign dstreg_data =  is_load   ? r_data
+	// ハードウェアカウンタ用アドレス（32'hffffff00）を指定して LW 命令をおこなった際に、データメモリの値ではなく、ハードウェアカウンタの値を読みだす.
+	assign dstreg_data =  is_load   ? ( ((alucode == `ALU_LW) && (ram_addr == `HARDWARE_COUNTER_ADDR))  ? hc_OUT_data : r_data )
 									: alu_result;
+
+	assign uart_IN_data = w_data[7:0];  // ストアするデータをモジュールへ入力
+    assign uart_we = ((ram_addr == `UART_ADDR) && (is_store == `ENABLE)) ? 1'b1 : 1'b0;  // シリアル通信用アドレスへのストア命令実行時に送信開始信号をアサート
+    assign uart_tx = uart_OUT_data;  // シリアル通信モジュールの出力はFPGA外部へと出力
 
 	register_file register_file_body(
         .clk(clk),
@@ -112,8 +123,27 @@ module cpu(
         .srcreg2_data(srcreg2_data)
     );
 
+	assign w_data = srcreg2_data;
+
+    hardware_counter hardware_counter0(
+        .CLK_IP(clk),
+        .RSTN_IP(rst),
+        .COUNTER_OP(hc_OUT_data)
+    );
+
+
+
+    uart uart0(
+        .uart_wr_i(uart_we),
+        .uart_dat_i(uart_IN_data),
+        .sys_clk_i(clk),
+        .sys_rstn_i(rst),
+
+		.uart_tx(uart_OUT_data),
+    );
+
   initial begin
-    $display("pc=%d, pc=%b, reg1=%d, reg2=%d, uart=%d\n", pc, ir, srcreg1_data, srcreg2_data, uart);
+    $display("pc=%d, ir=%b, reg1=%d, reg2=%d, uart=%d\n", pc, ir, srcreg1_data, srcreg2_data, uart);
   end
 
 endmodule
