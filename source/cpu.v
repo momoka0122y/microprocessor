@@ -5,6 +5,8 @@
 `include "execute.v"
 `include "write_back.v"
 `include "reg_file.v"
+`include "hardware_counter.v"
+`include "uart.v"
 
 
 module cpu(
@@ -34,6 +36,8 @@ module cpu(
     wire [31:0] alu_result;
 
     wire [31:0] dstreg_data;
+
+	wire [31:0] ram_addr;
 
 //    wire [31:0] r_addr;
    wire [31:0] w_data;
@@ -139,11 +143,11 @@ module cpu(
         .sys_clk_i(clk),
         .sys_rstn_i(rst),
 
-		.uart_tx(uart_OUT_data),
+		.uart_tx(uart_OUT_data)
     );
 
   initial begin
-    $display("pc=%d, ir=%b, reg1=%d, reg2=%d, uart=%d\n", pc, ir, srcreg1_data, srcreg2_data, uart);
+    $display("pc=%d, ir=%b, reg1=%d, reg2=%d, uart=%d\n", pc, ir, srcreg1_data, srcreg2_data, uart_tx);
   end
 
 endmodule

@@ -5,11 +5,11 @@ module uart(
    uart_wr_i,   // Raise to transmit byte
    uart_dat_i,  // 8-bit data
    sys_clk_i,   // System clock, 100 MHz
-   sys_rstn_i    // System reset
+   sys_rstn_i,    // System reset
 
    // Outputs
    // uart_busy,   // High means UART is transmitting
-   uart_tx,     // UART transmit wire
+   uart_tx     // UART transmit wire
 );
 
   input uart_wr_i;

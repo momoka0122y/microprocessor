@@ -12,7 +12,7 @@ module cpu_tb;
     cpu cpu(
        .clk(sysclk),
        .rst(cpu_resetn),
-       .uart(uart_tx)
+       .uart_tx(uart_tx)
     );
 
 
