@@ -1,19 +1,13 @@
-`include "define.vh"
-`include "fetch.v"
-`include "decoder.v"
-`include "data_mem.v"
-`include "execute.v"
-`include "write_back.v"
-`include "reg_file.v"
-`include "hardware_counter.v"
-`include "uart.v"
+`timescale 1ns / 1ps
 
 
 module cpu(
-    input wire clk,
-    input wire rst,
+    input wire sysclk,
+    input wire cpu_resetn,
     output wire uart_tx
     );
+    wire rst;
+    assign rst = cpu_resetn;
 	
 	wire [31:0] pc; //プログラムカウンタ
     wire [31:0] ir; //
@@ -58,7 +52,7 @@ module cpu(
 
 	decoder decoder_body(
         .ir(ir),
-        .clk(clk),
+        .clk(sysclk),
 
         .srcreg1_num(srcreg1_num),
         .srcreg2_num(srcreg2_num),
@@ -90,7 +84,7 @@ module cpu(
 	assign ram_addr = alu_result;
 
 	data_mem data_mem_body(
-		.clk(clk),
+		.clk(sysclk),
 		.alucode(alucode),
 		.is_store(is_store), //decoderより。load,storeするかどうか
         .is_load(is_load),
@@ -101,7 +95,7 @@ module cpu(
 	);
 
 	writeback writeback_body
-		(.clk(clk)
+		(.clk(sysclk)
 		,.rst(rst)
 		,.nextpc(nextpc)
 		,.pc(pc));
@@ -115,7 +109,7 @@ module cpu(
     assign uart_tx = uart_OUT_data;  // シリアル通信モジュールの出力はFPGA外部へと出力
 
 	register_file register_file_body(
-        .clk(clk),
+        .clk(sysclk),
         .rst(rst),
         .reg_we(reg_we),       // レジスタ書き込みの有無
         .srcreg1_num(srcreg1_num),//assignなのでつねに帰ってくる
@@ -130,7 +124,7 @@ module cpu(
 	assign w_data = srcreg2_data;
 
     hardware_counter hardware_counter0(
-        .CLK_IP(clk),
+        .CLK_IP(sysclk),
         .RSTN_IP(rst),
         .COUNTER_OP(hc_OUT_data)
     );
@@ -140,7 +134,7 @@ module cpu(
     uart uart0(
         .uart_wr_i(uart_we),
         .uart_dat_i(uart_IN_data),
-        .sys_clk_i(clk),
+        .sys_clk_i(sysclk),
         .sys_rstn_i(rst),
 
 		.uart_tx(uart_OUT_data)
