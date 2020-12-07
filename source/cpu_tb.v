@@ -10,8 +10,8 @@ module cpu_tb;
     always #(CYCLE/2) sysclk = ~sysclk;
 
     cpu cpu(
-       .clk(sysclk),
-       .rst(cpu_resetn),
+       .sysclk(sysclk),
+       .cpu_resetn(cpu_resetn),
        .uart_tx(uart_tx)
     );
 
