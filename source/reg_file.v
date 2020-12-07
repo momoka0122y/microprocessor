@@ -24,20 +24,20 @@ module register_file(
     
     integer i;
     always @(posedge clk or negedge rst) begin	
-        if (rst == 1'b0) begin //reset	    always @(posedge clk) begin
+        if (rst == 1'b0) begin //reset
             for (i=0;i<32;i=i+1) begin	
                 register_file[i] <= 32'h00000000;	
             end	
         end	
 
 
-        else begin	        if(reg_we==`ENABLE && dstreg_num != 5'd0) begin //書き込み
-            if(reg_we==`ENABLE && dstreg_num != 5'd0) begin //書き込み	            register_file[dstreg_num] <= dstreg_data;
+        else begin
+            if(reg_we==`ENABLE && dstreg_num != 5'd0) begin //書き込み
                 register_file[dstreg_num] <= dstreg_data;	
             end	
-        end	        end
+        end
 
-    end	    end
+    end
 
 
 endmodule
