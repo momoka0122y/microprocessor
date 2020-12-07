@@ -22,7 +22,7 @@ module register_file(
     assign srcreg1_data=register_file[srcreg1_num];
     assign srcreg2_data=register_file[srcreg2_num];
     
-    
+    integer i;
     always @(posedge clk or negedge rst) begin	
         if (rst == 1'b0) begin //reset	    always @(posedge clk) begin
             for (i=0;i<32;i=i+1) begin	
