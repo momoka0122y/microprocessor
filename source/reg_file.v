@@ -4,7 +4,7 @@
 `include "define.vh"
 
 //必要な、レジスタに記されている値を取り出したり、書き込んだりする
-module register_file(
+module reg_file(
     input wire clk,
     input wire rst,
     input wire	     	reg_we,       // レジスタ書き込みの有無

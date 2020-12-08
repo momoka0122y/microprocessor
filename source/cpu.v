@@ -108,7 +108,7 @@ module cpu(
     assign uart_we = ((ram_addr == `UART_ADDR) && (is_store == `ENABLE)) ? 1'b1 : 1'b0;  // シリアル通信用アドレスへのストア命令実行時に送信開始信号をアサート
     assign uart_tx = uart_OUT_data;  // シリアル通信モジュールの出力はFPGA外部へと出力
 
-	register_file register_file_body(
+	reg_file register_file_body(
         .clk(sysclk),
         .rst(rst),
         .reg_we(reg_we),       // レジスタ書き込みの有無

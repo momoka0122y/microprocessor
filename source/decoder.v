@@ -140,7 +140,7 @@ always @(ir) begin
         op_type <= `TYPE_J;
         // if (ir[11:7] == 5'b00000) reg_we <= `DISABLE;
         // else reg_we <= `ENABLE;
-        reg_we <= ir[11:7] ?  `ENABLE : `DISABLE;
+        reg_we <= (ir[11:7] == 0) ?  `ENABLE : `DISABLE;
         
         alucode <= `ALU_JAL;
         aluop1_type <= `OP_TYPE_NONE;
@@ -152,8 +152,8 @@ always @(ir) begin
 
       `JALR  : begin
         op_type <= `TYPE_I;
-        reg_we <= ir[11:7] ?  `ENABLE : `DISABLE;
-        alucode <= `ALU_JALR;
+        reg_we <= (ir[11:7] ß== 0) ?  `ENABLE : `DISABLE;
+        alucode <= `ALU_JALR
         aluop1_type <= `OP_TYPE_REG;
         aluop2_type <= `OP_TYPE_PC;
         is_load <= `DISABLE;

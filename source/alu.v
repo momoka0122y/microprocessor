@@ -115,14 +115,12 @@ module alu(
                   end
 
       `ALU_SLT  : begin
-                  if ($signed(op1) < $signed(op2)) alu_result <= `ENABLE;
-                  else alu_result <= `DISABLE;
+                  alu_result <= ($signed(op1) < $signed(op2));
                   br_taken <= 0;
                   end
 
       `ALU_SLTU : begin
-                  if ($unsigned(op1) < $unsigned(op2)) alu_result <= `ENABLE;
-                  else alu_result <= `DISABLE;
+                  alu_result <= ($unsigned(op1) < $unsigned(op2));
                   br_taken <= 0;
                   end
 

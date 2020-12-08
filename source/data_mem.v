@@ -13,7 +13,7 @@ module data_mem(
     output wire [31:0] r_data
 );
     //RAM
-    reg [31:0] ram [0:32768];
+    reg [31:0] ram [0:32767];
 
     initial $readmemh("/home/denjo/microprocessor/benchmarks/Coremark_for_Synthesis/data.hex", ram);
     // initial $readmemh("/Users/momoka/git/microprocessor/benchmarks/Coremark/data.hex", ram);
@@ -25,9 +25,9 @@ module data_mem(
                     (alucode == `ALU_LB  &&  addr[1:0] == 2'd2) ? {{24{ram[addr[16:2]][23]}}, ram[addr[16:2]][23:16]}:
                     (alucode == `ALU_LB  &&  addr[1:0] == 2'd3) ? {{24{ram[addr[16:2]][31]}}, ram[addr[16:2]][31:24]}:
 
-                    (alucode == `ALU_LH  &&  addr[1:0] == 2'd0) ? {{24{ram[addr[16:2]][15]}}, ram[addr[16:2]][15:0]}:
-                    (alucode == `ALU_LH  &&  addr[1:0] == 2'd1) ? {{24{ram[addr[16:2]][23]}}, ram[addr[16:2]][23:8]}:
-                    (alucode == `ALU_LH  &&  addr[1:0] == 2'd2) ? {{24{ram[addr[16:2]][31]}}, ram[addr[16:2]][31:16]}:
+                    (alucode == `ALU_LH  &&  addr[1:0] == 2'd0) ? {{16{ram[addr[16:2]][15]}}, ram[addr[16:2]][15:0]}:
+                    (alucode == `ALU_LH  &&  addr[1:0] == 2'd1) ? {{16{ram[addr[16:2]][23]}}, ram[addr[16:2]][23:8]}:
+                    (alucode == `ALU_LH  &&  addr[1:0] == 2'd2) ? {{16{ram[addr[16:2]][31]}}, ram[addr[16:2]][31:16]}:
 
                     (alucode == `ALU_LW  &&  addr[1:0] == 2'd3) ? ram[addr[16:2]][31:0]:
 
@@ -36,9 +36,9 @@ module data_mem(
                     (alucode == `ALU_LBU  &&  addr[1:0] == 2'd2) ? {{24{1'b0}}, ram[addr[16:2]][23:16]}:
                     (alucode == `ALU_LBU  &&  addr[1:0] == 2'd3) ? {{24{1'b0}}, ram[addr[16:2]][31:24]}:
 
-                    (alucode == `ALU_LHU  &&  addr[1:0] == 2'd0) ? {{24{1'b0}}, ram[addr[16:2]][15:0]}:
-                    (alucode == `ALU_LHU  &&  addr[1:0] == 2'd1) ? {{24{1'b0}}, ram[addr[16:2]][23:8]}:
-                    (alucode == `ALU_LHU  &&  addr[1:0] == 2'd2) ? {{24{1'b0}}, ram[addr[16:2]][31:16]}:
+                    (alucode == `ALU_LHU  &&  addr[1:0] == 2'd0) ? {{16{1'b0}}, ram[addr[16:2]][15:0]}:
+                    (alucode == `ALU_LHU  &&  addr[1:0] == 2'd1) ? {{16{1'b0}}, ram[addr[16:2]][23:8]}:
+                    (alucode == `ALU_LHU  &&  addr[1:0] == 2'd2) ? {{16{1'b0}}, ram[addr[16:2]][31:16]}:
 
                     ram[addr[16:2]][31:0]; //どれにも当てはまらなかったら困る。とりあえず`ALU_LWと同じにする。
 
