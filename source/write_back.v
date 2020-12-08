@@ -1,4 +1,4 @@
-module writeback(
+module write_back(
 	inout clk,
 	input rst, 
 	input	[31:0] nextpc,
