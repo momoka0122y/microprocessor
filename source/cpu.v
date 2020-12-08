@@ -1,5 +1,5 @@
 `timescale 1ns / 1ps
-
+`include "define.vh"
 
 module cpu(
     input wire sysclk,
@@ -94,7 +94,7 @@ module cpu(
         .r_data(r_data)//resultに格納してrdに
 	);
 
-	writeback writeback_body
+	write_back writeback_body
 		(.clk(sysclk)
 		,.rst(rst)
 		,.nextpc(nextpc)
