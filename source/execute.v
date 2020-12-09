@@ -1,5 +1,5 @@
 `include "define.vh"
-`include "alu.v"
+// `include "alu.v"
 
 module execute(
     input wire [31:0] pc,

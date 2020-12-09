@@ -1,5 +1,5 @@
 module write_back(
-	inout clk,
+	input clk,
 	input rst, 
 	input	[31:0] nextpc,
 	output reg [31:0]	pc
