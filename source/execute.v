@@ -30,6 +30,8 @@ endfunction
 assign op1 = op(aluop1_type, srcreg1, imm, pc);
 assign op2 = op(aluop2_type, srcreg2, imm, pc);
 
+wire br_taken;
+
 alu alu_body(
     .alucode(alucode),
     .op1(op1),

@@ -52,7 +52,7 @@ VL_MODULE(Vcpu) {
     VL_SIG(cpu__DOT__hardware_counter0__DOT__cycles,31,0);
     VL_SIG(cpu__DOT__uart0__DOT__d,28,0);
     VL_SIG(cpu__DOT__uart0__DOT__dNxt,28,0);
-    VL_SIG(cpu__DOT__fetch_body__DOT__ir_mem[32769],31,0);
+    VL_SIG(cpu__DOT__fetch_body__DOT__ir_mem[32768],31,0);
     VL_SIG(cpu__DOT__data_mem_body__DOT__ram[32768],31,0);
     VL_SIG(cpu__DOT__register_file_body__DOT__register_file[32],31,0);
     

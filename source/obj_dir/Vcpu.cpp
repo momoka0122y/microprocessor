@@ -96,7 +96,7 @@ void Vcpu::_initial__TOP__1(Vcpu__Syms* __restrict vlSymsp) {
     __Vtemp1[0xfU] = 0x2f64656eU;
     __Vtemp1[0x10U] = 0x686f6d65U;
     __Vtemp1[0x11U] = 0x2fU;
-    VL_READMEM_W (true,32,32769, 0,18, __Vtemp1, vlTOPp->cpu__DOT__fetch_body__DOT__ir_mem
+    VL_READMEM_W (true,32,32768, 0,18, __Vtemp1, vlTOPp->cpu__DOT__fetch_body__DOT__ir_mem
 		  ,0,~0);
     // INITIAL at data_mem.v:18
     __Vtemp2[0U] = 0x2e686578U;
@@ -508,12 +508,8 @@ VL_INLINE_OPT void Vcpu::_sequent__TOP__2(Vcpu__Syms* __restrict vlSymsp) {
     vlTOPp->cpu__DOT__uart0__DOT__d = ((IData)(vlTOPp->cpu_resetn)
 				        ? vlTOPp->cpu__DOT__uart0__DOT__dNxt
 				        : 0U);
-    vlTOPp->cpu__DOT__ir = ((0x8000U >= (0xffffU & 
-					 (vlTOPp->cpu__DOT__pc 
-					  >> 2U))) ? 
-			    vlTOPp->cpu__DOT__fetch_body__DOT__ir_mem
-			    [(0xffffU & (vlTOPp->cpu__DOT__pc 
-					 >> 2U))] : 0U);
+    vlTOPp->cpu__DOT__ir = vlTOPp->cpu__DOT__fetch_body__DOT__ir_mem
+	[(0x7fffU & (vlTOPp->cpu__DOT__pc >> 2U))];
     vlTOPp->cpu__DOT__uart0__DOT__dNxt = (0x1fffffffU 
 					  & (vlTOPp->cpu__DOT__uart0__DOT__d 
 					     + ((0x10000000U 
@@ -728,12 +724,8 @@ void Vcpu::_settle__TOP__4(Vcpu__Syms* __restrict vlSymsp) {
 						 & vlTOPp->cpu__DOT__uart0__DOT__d)
 						 ? 0x1c200U
 						 : 0xfed09500U)));
-    vlTOPp->cpu__DOT__ir = ((0x8000U >= (0xffffU & 
-					 (vlTOPp->cpu__DOT__pc 
-					  >> 2U))) ? 
-			    vlTOPp->cpu__DOT__fetch_body__DOT__ir_mem
-			    [(0xffffU & (vlTOPp->cpu__DOT__pc 
-					 >> 2U))] : 0U);
+    vlTOPp->cpu__DOT__ir = vlTOPp->cpu__DOT__fetch_body__DOT__ir_mem
+	[(0x7fffU & (vlTOPp->cpu__DOT__pc >> 2U))];
     // ALWAYS at decoder.v:64
     if (((((((((0x13U == (0x7fU & vlTOPp->cpu__DOT__ir)) 
 	       | (0x33U == (0x7fU & vlTOPp->cpu__DOT__ir))) 
@@ -2120,7 +2112,7 @@ void Vcpu::_ctor_var_reset() {
     cpu__DOT__nextpc = VL_RAND_RESET_I(32);
     cpu__DOT__alu_result = VL_RAND_RESET_I(32);
     cpu__DOT__uart_OUT_data = VL_RAND_RESET_I(1);
-    { int __Vi0=0; for (; __Vi0<32769; ++__Vi0) {
+    { int __Vi0=0; for (; __Vi0<32768; ++__Vi0) {
 	    cpu__DOT__fetch_body__DOT__ir_mem[__Vi0] = VL_RAND_RESET_I(32);
     }}
     cpu__DOT__decoder_body__DOT__op_type = VL_RAND_RESET_I(3);
