@@ -1,4 +1,4 @@
-`include "cpu.v"
+// `include "cpu.v"
 
 module cpu_tb_2;
     reg sysclk;

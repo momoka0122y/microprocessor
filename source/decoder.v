@@ -153,7 +153,7 @@ always @(ir) begin
       `JALR  : begin
         op_type <= `TYPE_I;
         reg_we <= (ir[11:7] == 0) ?  `ENABLE : `DISABLE;
-        alucode <= `ALU_JALR
+        alucode <= `ALU_JALR;
         aluop1_type <= `OP_TYPE_REG;
         aluop2_type <= `OP_TYPE_PC;
         is_load <= `DISABLE;

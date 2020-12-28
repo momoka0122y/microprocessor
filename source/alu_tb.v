@@ -17,8 +17,6 @@
         `assert("br_taken", br, ex_br_taken) \
         $display("%s test passed\n", name); \
 
-`include "define.vh"
-`include "alu.v"
 
 module alu_tb;
 

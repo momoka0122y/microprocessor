@@ -1,6 +1,7 @@
 #include <cstdio>
 #include <verilated.h>
 #include "define.vh"
+#include "Vcpu.h"
 
 // Set the clock speed of your processor.
 static constexpr std::size_t clock_Hz = 55000000;
@@ -34,24 +35,24 @@ void uart_rx(unsigned int u) {
 
 
 int main() {
-    Vtop top;
-    top.sysclk = 0;
-    top.eval();
-    top.cpu_resetn = 0;
-    top.eval();
-    top.sysclk = 1;
-    top.eval();
-    top.sysclk = 0;
-    top.eval();
-    top.cpu_resetn = 1;
-    top.eval();
+    Vcpu cpu;
+    cpu.sysclk = 0;
+    cpu.eval();
+    cpu.cpu_resetn = 0;
+    cpu.eval();
+    cpu.sysclk = 1;
+    cpu.eval();
+    cpu.sysclk = 0;
+    cpu.eval();
+    cpu.cpu_resetn = 1;
+    cpu.eval();
 
     for( std::size_t cycle = 0; cycle < max_cycle; ++cycle ) {
-        top.sysclk = 0;
-        top.eval();
-        top.sysclk = 1;
-        top.eval();
-        uart_rx(top.uart_rx_out);
+        cpu.sysclk = 0;
+        cpu.eval();
+        cpu.sysclk = 1;
+        cpu.eval();
+        uart_rx(cpu.uart_rx_out);
         timer_ps += 1000000000000 / clock_Hz;
     }
 }
